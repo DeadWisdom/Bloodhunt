@@ -1,0 +1,6 @@
+/_*
+/env
+/.*
+*.pyc
+.DS_Store
+style.css

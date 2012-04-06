@@ -3,7 +3,7 @@ import nodes
 from creole import text2html
 from flask import Flask, render_template, jsonify, request, abort
 app = Flask(__name__)
-
+application = app
 
 ## Views ##
 @app.route('/')

@@ -1,0 +1,57 @@
+.t-panel:
+    background-color: rgba(0, 0, 0, .6);
+    border: 1px solid rgba(255, 255, 255, .2)
+    color: #DDD
+    box-shadow: 0px 0px 2px rgba(140, 140, 140, .4)
+    width: 260px
+    
+    .t-title:
+        font-family: "futura-pt", sans-serif
+        position: absolute
+        width: 100%
+        top: -18px
+        margin-right: 2px
+        font-size: 18px
+        
+    .t-top:
+        display: none
+        position: absolute
+        z-index: 99
+        right: 0px
+        top: -20px
+        
+        .t-button:
+            float: left
+            display: block
+            padding: 4px 10px
+            cursor: pointer
+            
+            .t-text:
+                font-family: "futura-pt", sans-serif
+                font-size: 16px
+                text-align: center
+                text-transform: lowercase
+        
+            &:hover:
+                color: #FFF
+                text-shadow: 0px 0px 8px #ffffff
+                background-color: rgba(140, 30, 30, .3)
+                box-shadow: 0px 0px 16px rgba(140, 30, 30, .8)
+        
+        .ok-button:hover:
+            color: #FFF
+            text-shadow: 0px 0px 8px #ffffff
+            background-color: rgba(30, 140, 30, .3)
+            box-shadow: 0px 0px 16px rgba(30, 140, 30, .8)
+        
+    .t-focuser:
+        display: none
+
+.node-menu:
+    width: 260px
+    
+.node-document:
+    width: 700px
+
+.node-character:
+    width: 700px

@@ -1,0 +1,30 @@
+#console:
+    position: fixed
+    bottom: 0px
+    left: 0px
+    right: 0px
+    height: 40px
+    background: #222
+    z-index: 101
+    
+    .closer:
+        display: none
+
+#console.open:
+    position: fixed
+    top: 0px
+    height: auto
+    overflow: auto
+    
+    .closer:
+        display: block
+        position: absolute
+        top: 4px
+        right: 4px
+        width: 32px
+        background: url('img/closer.png') no-repeat scroll top left
+        width: 19px
+        height: 19px
+        color: transparent
+        cursor: pointer
+        overflow: hidden

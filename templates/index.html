@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ashton - City of Whispers</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery.cookie.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery.history.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='lib/tea.js') }}"></script>
+        
+        <script type="text/javascript">
+            Tea.root = "{{ url_for('static', filename='') }}";
+        </script>
+        
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+        
+        <script type="text/javascript">
+            app.setup({
+                background: "{{ url_for('static', filename='img/backgrounds/blackfloral.jpg') }}",
+                nodeset: {{nodeset|tojson|safe}}
+            });
+        </script>
+    </head>
+    <body class="serif">
+        <noscript>Javascript must be enabled to view this site.</noscript>
+        {#
+            <div class="menu">
+                <a href="/inhabitants/">Inhabitants</a>
+                <a href="/places/">Places</a>
+                <a href="/players/">Players</a>
+            </div>
+            <p>Along the shore the cloud waves break, The twin suns sink behind the lake, The shadows lengthen.</p>
+        #}
+    </body>
+</html>

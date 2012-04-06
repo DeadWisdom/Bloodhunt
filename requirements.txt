@@ -1,0 +1,6 @@
+-e git://github.com/jabapyth/clevercss2@51c3c0a467d29347394676483e37ed184a453712#egg=CleverCSS-dev
+-e git+http://github.com/mitsuhiko/flask.git@f07199009c463ed5eaab7b2cacd785d46f87699d#egg=Flask-dev
+Jinja2==2.6
+Werkzeug==0.8.3
+redis==2.4.11
+wsgiref==0.1.2

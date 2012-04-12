@@ -9,7 +9,7 @@ application = app
 
 ## Views ##
 @app.route('/', methods=['GET'])
-def index(path):
+def index():
     return get_nodes('')
 
 

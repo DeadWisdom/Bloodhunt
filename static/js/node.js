@@ -57,9 +57,9 @@ Node = Tea.Panel.extend('Node', {
             context: this
         });
     },
-    loadSuccess : function(data) {
+    loadSuccess : function(nodes) {
         this.unhookAll();
-        this.setValue( app.session.resource(data) );
+        this.setValue( app.session.resource(nodes[0]) );
         
         if (this.parent)
             this.parent.skin.refreshHeights();

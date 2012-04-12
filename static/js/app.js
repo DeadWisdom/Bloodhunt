@@ -1,5 +1,6 @@
 Tea.require(
     "js/background.js",
+    "js/widgets.js",
     "js/stack.js",
     "js/node.js",
     "js/editor.js",
@@ -40,14 +41,14 @@ app = Tea.Application({
         this.scrim = Tea.Scrim();
         
         var path = [];
-        for(var i = 0; i < this.nodeset.length; i++) {
+        for(var i = 0; i < this.nodes.length; i++) {
             this.stack.push({
                 type: 'Node',
-                value: this.session.resource(this.nodeset[i])
+                value: this.session.resource(this.nodes[i])
             });
-            if (this.nodeset[i].slug == 'index')
+            if (this.nodes[i].slug == 'index')
                 continue;
-            path.push(this.nodeset[i].slug);
+            path.push(this.nodes[i].slug);
         }
         this.nav.replace(path);
     },

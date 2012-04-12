@@ -5,8 +5,7 @@ Editor = Tea.Panel.extend('Editor', {
         value: null,
         target: null,
         hideTop: false,
-        width: 350,
-        resizeMaster: true
+        width: 350
     },
     init : function() {
         this.top = [
@@ -35,11 +34,13 @@ Editor = Tea.Panel.extend('Editor', {
         
         this.render().appendTo(document.body).stop(true, true).hide().fadeIn();
         
-        this.form.setValue(this.value);
-        this.content.setValue(this.value.content);
-        this.setTitle(this.value.slug)
-        
         this.resize();
+    },
+    setValue : function(value) {
+        this.value = value;
+        this.form.setValue(value);
+        this.content.setValue(value);
+        this.setTitle(this.value.slug);
     },
     resize : function() {
         if (this.target == null) return;
@@ -81,20 +82,5 @@ Editor = Tea.Panel.extend('Editor', {
         app.session.resource(data);
         $('a.missing[slug=' + data.slug + ']').removeClass('missing');
         this.remove();
-    }
-});
-
-GrowingTextareaSkin = Tea.TextAreaInput.Skin.extend('growing-textarea', {
-    render : function(source) {
-        var element = this.element;
-        source = this.__super__(source);
-        
-        source.on('keydown', function() {
-            window.o = source;
-            console.log(source.innerHeight());
-            console.log(source);
-        });
-        
-        return source;
     }
 });

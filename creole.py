@@ -1,12 +1,30 @@
 import urllib, re
-import genshi
+from genshi.builder import tag
+from genshi.input import HTML
+from flask import render_template
 import creoleparser
 from config import redis
 from schema.util import slug
 
 def menu(macro, environ):
     """Places the contents in a class=".menu" div."""
-    return genshi.builder.tag.div(macro.parsed_body(), class_="menu")
+    return tag.div(macro.parsed_body(), class_="menu")
+
+def related(macro, environ, predicate, obj):
+    """Gets links to related items."""
+    import wiki
+    links = []
+    print wiki.ask("*", predicate, obj)
+    for slug in wiki.ask("*", predicate, obj):
+        node = wiki.get(slug)
+        if node:
+            links.append( HTML(render_template(["plate/%s.html" % node.get('type', 'default'), "plate/default.html"], node=node)) )
+        else:
+            links.append( tag.a(slug, href=slug) )
+    return tag.div(links, class_="related")
+
+def hidden(macro, environ):
+    return tag.div(macro.parsed_body(), class_="hidden")
 
 def wiki_links_path_func(src):
     if (".com" in src or
@@ -28,6 +46,12 @@ dialect = creoleparser.create_dialect(
               wiki_links_class_func=wiki_links_class_func,
               wiki_links_path_func=wiki_links_path_func,
               wiki_links_space_char="-",
-              bodied_macros={'menu': menu})
+              bodied_macros={'menu': menu, 'hidden': hidden},
+              non_bodied_macros={'related': related})
 
-text2html = creoleparser.Parser(dialect)
+parser = creoleparser.Parser(dialect)
+
+def text2html(src):
+    from wiki import re_related
+    src = re_related.sub(r"[[\2]]", src)
+    return parser( src )

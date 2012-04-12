@@ -1,4 +1,16 @@
 #!env/bin/python
+
+"""Usage: manage.py command
+
+Options:
+  -h --help            show this help message and exit
+
+Subcommands:
+  dumpdata <path>       Dump all node data to the given file.
+  loaddata <path>       Load node data from the given file.
+  flushdb               Destroys all data in the database.
+"""
+
 import sys, json
 from config import redis
 
@@ -18,6 +30,10 @@ command = sys.argv[1]
 
 if command == 'help':
     usage(0)
+    
+if command == 'runserver':
+    from wsgi import app
+    app.run(debug = True)
 
 elif command == 'dumpdata':
     try:

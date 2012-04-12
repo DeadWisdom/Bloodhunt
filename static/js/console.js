@@ -1,7 +1,6 @@
 Console = Tea.Container.extend('Console', {
     options: {
-        id: 'console',
-        resizeMaster: true
+        id: 'console'
     },
     init : function() {
         this._open = false;
@@ -10,6 +9,8 @@ Console = Tea.Container.extend('Console', {
         
         this.closeBox = this.append({type: 't-button', text: 'close', cls: 'closer', click: this.close, context: this});
         this.editor = this.append({type: 'Editor2'});
+        
+        this.hook($(window), 'resize', this.onResize);
     },
     open : function() {
         this.source.stop().animate({
@@ -19,6 +20,9 @@ Console = Tea.Container.extend('Console', {
     },
     openComplete : function() {
         this.source.addClass('open');
+        this.source.stop().css({
+            height: 'auto'
+        })
         app.stack.hide();
         this._open = true;
     },
@@ -26,6 +30,7 @@ Console = Tea.Container.extend('Console', {
         this._open = null;
         this.source.removeClass('open');
         app.stack.show();
+        app.stack.refresh();
         this.source.stop().animate({
             height: this._height,
         }, 100, null, Tea.method(this.closeComplete, this));
@@ -40,7 +45,8 @@ Console = Tea.Container.extend('Console', {
     onResize : function() {
         if (this._open == true) {
             this.source.css({
-                bottom: 0
+                bottom: 0,
+                height: 'auto'
             })
         }
     }

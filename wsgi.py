@@ -5,6 +5,7 @@ from schema.util import slug as slugify
 from flask import Flask, render_template, jsonify, request, abort, current_app
 app = Flask(__name__)
 application = app
+app.debug = True
 
 ### Flask Mucking ###
 app.jinja_env.filters['creole'] = text2html

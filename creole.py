@@ -14,6 +14,8 @@ def related(macro, environ, predicate, obj):
     """Gets links to related items."""
     import wiki
     links = []
+    predicate = to_slug(predicate)
+    obj = to_slug(obj)
     for slug in wiki.ask("*", predicate, obj):
         node = wiki.get(slug)
         if node:

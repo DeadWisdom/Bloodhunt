@@ -20,7 +20,6 @@ def get(slug):
     node = json.loads(src)
     type = get_type(node.get('type')) or get_default_type()
     node['_html'] = render_template_string(type.get('details', ''), node=node)
-    print node['_html']
     if not 'type' in node:
         node['type'] = 'document'
     return node
@@ -48,6 +47,9 @@ def put(slug, value):
             relations.update(get_relations_from_text(content))
     set_relations(slug, relations)
     redis.set('n:' + slug, json.dumps(value))
+    
+    value['_html'] = render_template_string(type.get('details', ''), node=value)
+    
     return value
 
 class FormError(TypeError):

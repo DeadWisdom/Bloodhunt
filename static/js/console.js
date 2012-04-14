@@ -129,8 +129,9 @@ Editor2 = Tea.Container.extend('Editor2', {
             console.log("Form save error.")
             console.log(data.__error__);
             return;
+        } else {
+            app.session.resource(data);
         }
-        app.session.resource(data);
         $('a.missing[slug=' + data.slug + ']').removeClass('missing');
         this.close();
     }

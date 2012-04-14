@@ -19,7 +19,7 @@ def get(slug):
         return None
     node = json.loads(src)
     type = get_type(node.get('type')) or get_default_type()
-    node['_html'] = render_template_string(type.get('details', ''), node=node)
+    node['_html'] = render_template_string(type.get('details', '*No content yet.*'), node=node)
     if not 'type' in node:
         node['type'] = 'document'
     return node

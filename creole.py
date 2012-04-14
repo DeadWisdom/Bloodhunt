@@ -48,7 +48,7 @@ dialect = creoleparser.create_dialect(
               bodied_macros={'menu': menu, 'hidden': hidden},
               non_bodied_macros={'related': related})
 
-parser = creoleparser.Parser(dialect)
+parser = creoleparser.Parser(dialect, encoding=None)
 
 def text2html(src):
     from wiki import re_related

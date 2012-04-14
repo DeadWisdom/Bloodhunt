@@ -26,7 +26,7 @@
             font-family: "futura-pt", sans-serif
             display: block
             padding: 5px 10px
-            text-align: right
+            text-align: left
             font-size: 20px
     
             &:hover:
@@ -83,3 +83,7 @@
             p:
                 padding: 0
         
+.node-menu:
+    .menu:
+        a:
+            text-align: right

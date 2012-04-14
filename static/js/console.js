@@ -41,6 +41,7 @@ Console = Tea.Container.extend('Console', {
     edit : function(node) {
         this.open();
         this.editor.setValue(node);
+        console.log(node);
     },
     onResize : function() {
         if (this._open == true) {
@@ -69,24 +70,46 @@ Editor2 = Tea.Container.extend('Editor2', {
                       text: 'save',
                       click: 'save',
                       context: this }]
-        })
+        });
         
         this.form = this.append({
             type: 't-container',
-            cls: 'properties',
-            items: [
-                {type: 't-text', name: 'name', label: 'Name'},
-                {type: 't-select', name: 'type', label: 'Type', choices: [
-                    'menu',
-                    'document',
-                    'character'
-                ]},
-                {type: 't-textarea', name: 'content', cls: 'content', label: 'Content'}
-            ]
+            cls: 'properties'
         });
+        
+        this._formType = null;
+    },
+    buildForm : function(typeSlug) {
+        var type = app.types[typeSlug] || app.types['document'];
+        var types = [];
+        
+        $.each(app.types, function(k, v) { if (k != 'type') types.push(k) });    
+        this.form.empty();
+        if (type.slug != 'type') {
+            this._typeField = this.form.append(
+                {type: 't-select', name: 'type', label: 'Type', choices: types}
+            );
+            
+            this.unhookAll();
+            this.hook(this._typeField.input.source, 'change', this.changeType);
+        }
+        
+        for(var i = 0; i < type.fields.length; i++) {
+            this.form.append( type.fields[i] );
+        }
+    },
+    changeType : function(e) {
+        var val = $.extend({}, this.value, this.getValue(), {type: this._typeField.getValue()});
+        this.setValue(val);
     },
     setValue : function(node) {
         this.value = node;
+        if (node == null) return;
+        
+        if (this._formType != node.type) {
+            this._formType = node.type;
+            this.buildForm(node.type);
+        }
         this.form.setValue(node);
     },
     close : function() {
@@ -102,8 +125,13 @@ Editor2 = Tea.Container.extend('Editor2', {
         })
     },
     saveSuccess : function(data) {
+        if (data.__error__) {
+            console.log("Form save error.")
+            console.log(data.__error__);
+            return;
+        }
         app.session.resource(data);
         $('a.missing[slug=' + data.slug + ']').removeClass('missing');
         this.close();
     }
-})
+});

@@ -56,4 +56,30 @@
         &:hover:
             color: white
             text-shadow: none
+    
+    .portrait:
+        img:
+            float: left
+            margin: 5px
+            max-width: 300px
+        
+        dl:
+            margin: 0
+            float: left
+        
+        dd.name:
+            font-size: 24px
+        
+        dt:
+            font-size: 12px
+            margin-left: 4px
+
+        dd:
+            margin-left: 14px   
+            line-height: 20px
+            margin-bottom: 4px
+            width: 350px
             
+            p:
+                padding: 0
+        

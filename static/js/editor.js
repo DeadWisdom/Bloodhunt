@@ -84,3 +84,109 @@ Editor = Tea.Panel.extend('Editor', {
         this.remove();
     }
 });
+
+SlugField = Tea.TextField.extend('slug', {
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    }
+});
+
+StringField = Tea.TextField.extend('string', {
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    }
+});
+
+IntegerField = Tea.TextField.extend('integer', {
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    }
+});
+
+ListInput = Tea.Container.extend('list-input', {
+    options: {
+        cls: 'list-input',
+        item: {type: 't-text'}
+    },
+    __init__ : function(opts) {
+        this.__super__(opts);
+        this.setValue(this.value);
+    },
+    getValue : function() {
+        var value = [];
+        this.items(function(i, item) {
+            value.push( item.getValue() );
+        });
+        return value;
+    },
+    setValue : function(v) {
+        this.empty();
+        if (v) {
+            for(var i = 0; i < v.length; i++) {
+                this.append($.extend(this.item, {value: v[i]}));
+            }
+        }
+        this.append(this.item);
+    }
+});
+
+ListField = Tea.Field.extend('list', {
+    options: {
+        input: 'list-input'
+    },
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+        this.input.item = this.item;
+        this.input.setValue(this.value);
+    }
+});
+
+PageField = Tea.TextAreaField.extend('page', {
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    }
+});
+
+YamlField = Tea.TextAreaField.extend('yaml', {
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    },
+    setValue : function(obj) {
+        if (typeof(obj) == 'object')
+            return this.__super__(Tea.toJSON(obj));
+        else
+            return this.__super__(obj);
+    }
+});
+
+Form = Tea.Container.extend('dict', {
+    options: {
+        cls: 'form'
+    }
+});
+
+SelectField = Tea.SelectField.extend('select', {
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    }
+});
+
+ConstantField = Tea.TextField.extend('constant', {
+    options: {
+        disabled: true
+    },
+    __init__ : function(o) {
+        if (!o.label) o.label = o.name;
+        this.__super__(o);
+    },
+    getValue : function() {
+        return this.value
+    }
+});

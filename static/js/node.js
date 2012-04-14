@@ -22,7 +22,7 @@ Node = Tea.Panel.extend('Node', {
         app.console.edit(this.value);
     },
     refresh : function() {
-        var cls = (this.value.type ? 'node-' + this.value.type : 'node-document');
+        var cls = (this.value.type ? 'node-' + this.value.type : 'node-default');
         var html = $(this.value._html);
         var path = this.path || [];
         
@@ -35,7 +35,7 @@ Node = Tea.Panel.extend('Node', {
         }
         
         this.setHTML(html);
-        this.setTitle(this.value.name);
+        this.setTitle(this.value.name || this.value.slug);
         
         if (this.isRendered())
             this.source.attr('class', 't-panel ' + cls);

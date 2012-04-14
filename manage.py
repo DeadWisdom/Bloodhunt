@@ -45,9 +45,13 @@ elif command == 'dumpdata':
         o.write("[\n  ")
         first = True
         for key in redis.keys("n:*"):
+            try:
+                src = redis.get(key)
+            except:
+                continue
             if not first:
                 o.write(",\n  ")
-            o.write(redis.get(key))
+            o.write(src)
             first = False
         o.write("\n]")
     

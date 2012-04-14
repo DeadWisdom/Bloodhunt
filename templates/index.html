@@ -19,8 +19,8 @@
         <script type="text/javascript">
             app.setup({
                 background: "{{ url_for('static', filename='img/backgrounds/blackfloral.jpg') }}",
-                nodes: {{nodes|tojson|safe}}
-                {# types: {{types|tojson|safe}} #}
+                nodes: {{nodes|tojson|safe}},
+                types: {{types|tojson|safe}}
             });
         </script>
     </head>

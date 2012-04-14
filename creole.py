@@ -4,7 +4,7 @@ from genshi.input import HTML
 from flask import render_template
 import creoleparser
 from config import redis
-from schema.util import slug
+from util import to_slug
 
 def menu(macro, environ):
     """Places the contents in a class=".menu" div."""
@@ -14,7 +14,6 @@ def related(macro, environ, predicate, obj):
     """Gets links to related items."""
     import wiki
     links = []
-    print wiki.ask("*", predicate, obj)
     for slug in wiki.ask("*", predicate, obj):
         node = wiki.get(slug)
         if node:
@@ -31,14 +30,14 @@ def wiki_links_path_func(src):
         ".net" in src or
         ".org" in src):
         return "http://%s" % src
-    return slug(src)
+    return to_slug(src)
 
 def wiki_links_class_func(src):
     if (".com" in src or
         ".net" in src or
         ".org" in src):
         return "external"
-    if not redis.exists("n:" + slug(src)):
+    if not redis.exists("n:" + to_slug(src)):
         return "missing"
 
 dialect = creoleparser.create_dialect(

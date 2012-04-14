@@ -40,6 +40,7 @@ Console = Tea.Container.extend('Console', {
     },
     edit : function(node) {
         this.open();
+        this.editor._formType = null;
         this.editor.setValue(node);
         console.log(node);
     },

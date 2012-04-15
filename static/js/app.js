@@ -5,7 +5,8 @@ Tea.require(
     "js/node.js",
     "js/editor.js",
     "js/console.js",
-    "js/nav.js"
+    "js/nav.js",
+    "js/search.js"
 );
 
 app = Tea.Application({
@@ -25,6 +26,9 @@ app = Tea.Application({
             id: 'workspace'
         });
         this.workspace.render().appendTo(document.body);
+        
+        this.results = SearchResults({});
+        this.results.render().appendTo(document.body);
         
         this.background = this.workspace.append({
             type: 'Background',
@@ -59,16 +63,29 @@ app = Tea.Application({
     open : function(path, replace) {
         var i = 1;
         var bread = [];
+        var panel;
         this.stack.pause();
+        this.results.close();
         
-        while(path.length > 0) {
-            var slug = path.head();
-            var panel = this.stack.items[i++];
-            path = path.tail();
-            bread = bread.concat([slug]);
+        if (path[0] != '')
+            path.unshift('');
+        
+        for(var i = 0; i < path.length; i++) {
+            if (i == 0) {
+                var slug = 'index';
+            } else {
+                var slug = path[i];
+                if (slug.length < 1) continue;
+                bread.push(slug);
+            }
             
-            if (panel && panel.value.slug != slug)
-                this.stack.pop(panel);
+            if (this.stack.items.length > i) {
+                if (this.stack.items[i].value.slug != slug) {
+                    this.stack.pop(this.stack.items[i]);
+                } else {
+                    continue;
+                }
+            }
             
             panel = this.stack.push({
                 type: 'Node',
@@ -79,7 +96,8 @@ app = Tea.Application({
         }
         
         this.stack.play();
-        this.stack.refresh(panel);
+        if (panel)
+            this.stack.refresh(panel);
         
         if (replace)
             this.nav.replace(bread);
@@ -94,6 +112,8 @@ Tea.Panel = Tea.Panel.extend('t-panel', {
     },
     render : function(source) {
         source = this.__super__(source);
+        
+        if (!this.top) return source;
         
         if (this.hideTop) {
             this.skin.title

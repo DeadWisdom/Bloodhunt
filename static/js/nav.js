@@ -28,8 +28,7 @@ Nav = Tea.Class('Nav', {
         }
     },
     open : function(what) {
-        console.log("Open:", what);
-        app.open(Path(what));
+        app.open(what);
         return false;
     },
     redirect : function(path) {

@@ -1,0 +1,19 @@
+.search-results:
+    display: none
+    background-color: #222222
+    position: absolute
+    top: 43px
+    left: 0px
+    width: 200px
+    border: none
+    
+    .t-title:
+        display: none
+    
+    .t-button:
+        display: block
+        padding: 6px
+        text-decoration: none
+        
+        .t-text:
+            font-family: futura-pt, sans-seri

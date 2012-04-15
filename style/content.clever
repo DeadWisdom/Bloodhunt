@@ -4,7 +4,7 @@
         text-decoration: underlined
 
         &:hover:
-            background-color: rgba(140, 30, 30, .3)
+            background-color: rgba(140, 30, 30, .35)
             color: #FFF
             text-shadow: 0px 0px 8px #ffffff
             box-shadow: 0px 0px 16px rgba(140, 30, 30, .8)
@@ -30,7 +30,7 @@
             font-size: 20px
     
             &:hover:
-                background-color: rgba(140, 30, 30, .3)
+                background-color: rgba(140, 30, 30, .35)
                 color: #FFF
                 text-shadow: 0px 0px 8px #ffffff
                 box-shadow: 0px 0px 16px rgba(140, 30, 30, .8)
@@ -45,6 +45,19 @@
         padding: 8px
         a:
             display: block
+            font-family: "futura-pt", sans-serif
+    
+    .recent:
+        padding: 8px
+        a:
+            display: block
+            text-decoration: none
+            font-family: "futura-pt", sans-serif
+            
+        .updated:
+            color: #888
+            font-size: 12px
+            display: inline
     
     .hidden:
         display: none

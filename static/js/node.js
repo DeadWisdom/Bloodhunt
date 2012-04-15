@@ -23,9 +23,8 @@ Node = Tea.Panel.extend('Node', {
     },
     refresh : function() {
         var cls = (this.value.type ? 'node-' + this.value.type : 'node-default');
-        var html = $(this.value._html);
+        var html = $('<div>' + this.value._html + '</div>');
         var path = this.path || [];
-        
         if (this.value.type == 'menu') {
             html.find('a').not('a.external').each(function() {
                 var href = $(this).attr('href');

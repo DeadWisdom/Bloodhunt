@@ -71,6 +71,20 @@ elif command == "loaddata":
     
     print "Loadded data from %s" % path
 
+elif command == 'fixdb':
+    import wiki, search
+    types = wiki.get_types()
+    for k, v in types.items():
+        if k == 'type':
+            continue
+        try:
+            wiki.put_type(k, v)
+        except wiki.FormError, e:
+            print e.field
+    search.rebuild_index()
+    wiki.rebuild_nodes()
+    print "Wiki Rebuilt."
+
 elif command == 'flushdb':
     redis.flushdb()
 

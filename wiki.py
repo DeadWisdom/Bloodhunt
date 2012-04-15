@@ -1,5 +1,6 @@
 import json, re
-import fields
+import fields, search
+from datetime import datetime
 from util import to_slug
 from creole import text2html
 from config import redis
@@ -18,13 +19,11 @@ def get(slug):
     if src is None:
         return None
     node = json.loads(src)
-    type = get_type(node.get('type')) or get_default_type()
-    node['_html'] = render_template_string(type.get('details', None) or '*No content yet.*', node=node)
     if not 'type' in node:
         node['type'] = 'document'
     return node
 
-def put(slug, value):
+def put(slug, value, update=True):
     slug = to_slug(slug)
     if ':' in slug:
         left, _, right = slug.partition(':')
@@ -41,15 +40,15 @@ def put(slug, value):
     
     value['type'] = type['slug'].split(':', 1)[1]
     value['slug'] = slug
+    if update:
+        value['updated'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     relations = set()
     for k, content in value.items():
         if isinstance(content, basestring):
             relations.update(get_relations_from_text(content))
     set_relations(slug, relations)
     redis.set('n:' + slug, json.dumps(value))
-    
-    value['_html'] = render_template_string(type.get('details', ''), node=value)
-    
+    search.index_node(value)
     return value
 
 class FormError(TypeError):
@@ -118,7 +117,6 @@ def get_type(slug):
     if src is None:
         return None
     data = json.loads(src)
-    data['_html'] = text2html(data.get('details', ' '))
     return data
 
 def put_type(slug, value):
@@ -129,9 +127,19 @@ def put_type(slug, value):
         raise FormError(supertype['fields'])
     value['slug'] = 'type:' + slug
     value['type'] = 'type'
+    value['updated'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     redis.sadd("types", slug)
     redis.set('n:type:' + slug, json.dumps(value))
+    set_type_template(slug, 'details', value.get('details'))
+    set_type_template(slug, 'summary', value.get('summary'))
     return value
+
+def get_type_template(slug, key='details'):
+    return redis.hget('t:%s' % key, slug) or '-'
+
+def set_type_template(slug, key, value):
+    if value:
+        redis.hset("t:%s" % key, slug, value)
 
 def get_types():
     result = {
@@ -170,3 +178,12 @@ def get_type_type():
             {'name': 'width', 'type': 'integer', 'help': 'Default pixel with of the type.', 'required': False, 'default': 700},
         ]
     }
+
+### Migration ###
+def rebuild_nodes():
+    for key in redis.keys('n:*'):
+        try:
+            node = get(key[2:])
+        except Exception, e:
+            continue
+        put(node['slug'], node, False)

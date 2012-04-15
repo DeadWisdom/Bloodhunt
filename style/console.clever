@@ -1,13 +1,48 @@
 #console:
     position: fixed
-    bottom: 0px
+    top: 0px
     left: 0px
     right: 0px
     height: 40px
     background: #222
     z-index: 101
     
-    .closer:
+    .bar:
+        display: block
+        
+        .t-button:
+            cursor: pointer
+            float: left
+            display: block
+            padding: 6px
+            border: 1px solid #444
+            margin: 2px
+            
+            .t-text:
+                font-family: futura-pt, sans-serif
+            
+            .t-icon:
+                display: none
+    
+    .search-box:
+        float: left
+        margin: 4px
+        background-color: transparent
+        font-family: futura-pt, sans-serif
+        border: none
+        padding: 3px 3px 2px
+        font-size: 20px
+        color: white
+        width: 50%
+        max-width: 300px
+    
+    input::-webkit-input-placeholder:
+        color: #555
+    
+    input:-moz-placeholder:
+        color: #555
+        
+    .editor:
         display: none
 
 #console.open:
@@ -15,6 +50,9 @@
     top: 0px
     height: auto
     overflow: auto
+    
+    .bar:
+        display: none
     
     .closer:
         display: block
@@ -28,3 +66,6 @@
         color: transparent
         cursor: pointer
         overflow: hidden
+    
+    .editor:
+        display: block

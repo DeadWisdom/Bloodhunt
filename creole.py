@@ -27,6 +27,17 @@ def related(macro, environ, predicate, obj):
 def hidden(macro, environ):
     return tag.div(macro.parsed_body(), class_="hidden")
 
+def recent(macro, environ):
+    """Returns 30 links to the most recently changed nodes."""
+    import search
+    links = []
+    for node in search.recent():
+        if node:
+            links.append( HTML(render_template("plate/recent_plate.html", node=node)) )
+        else:
+            links.append( tag.a(slug, href=slug) )
+    return tag.div(links, class_="recent")
+
 def wiki_links_path_func(src):
     if (".com" in src or
         ".net" in src or
@@ -48,7 +59,7 @@ dialect = creoleparser.create_dialect(
               wiki_links_path_func=wiki_links_path_func,
               wiki_links_space_char="-",
               bodied_macros={'menu': menu, 'hidden': hidden},
-              non_bodied_macros={'related': related})
+              non_bodied_macros={'related': related, 'recent': recent})
 
 parser = creoleparser.Parser(dialect, encoding=None)
 

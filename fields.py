@@ -60,7 +60,9 @@ def dict_filter(field, value):
     return result
 
 def yaml_filter(field, value):
-    return json.loads(value)
+    if isinstance(value, basestring):
+        return json.loads(value)
+    return value
 
 def constant_filter(field, value):
     return field['value']

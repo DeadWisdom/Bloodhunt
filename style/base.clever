@@ -1,3 +1,6 @@
+a:
+    outline: none
+
 body:
     background: #000
     color: white
@@ -27,7 +30,8 @@ p:
     display: none
 
 #workspace:
-    margin: 50px 20px 120px
+    position: relative
+    margin: 70px 10px 120px 10px
 
 #logo:
     padding: 0

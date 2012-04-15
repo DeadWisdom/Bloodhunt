@@ -7,21 +7,24 @@ Console = Tea.Container.extend('Console', {
         this.render().appendTo(document.body);
         this._height = this.source.height();
         
-        this.closeBox = this.append({type: 't-button', text: 'close', cls: 'closer', click: this.close, context: this});
+        this.bar = this.append({type: 't-container', cls: 'bar'});
+        this.searchBox = this.bar.append('search-box');
         this.editor = this.append({type: 'Editor2'});
         
         this.hook($(window), 'resize', this.onResize);
     },
     open : function() {
+        this.source.addClass('open');
+        console.log($(window).height());
         this.source.stop().animate({
             height: $(window).height()
         }, 'fast', 'swing', Tea.method(this.openComplete, this));
         this._open = null;
     },
     openComplete : function() {
-        this.source.addClass('open');
         this.source.stop().css({
-            height: 'auto'
+            height: 'auto',
+            bottom: 0
         })
         app.stack.hide();
         this._open = true;
@@ -33,6 +36,7 @@ Console = Tea.Container.extend('Console', {
         app.stack.refresh();
         this.source.stop().animate({
             height: this._height,
+            bottom: 'auto'
         }, 100, null, Tea.method(this.closeComplete, this));
     },
     closeComplete : function() {
@@ -42,7 +46,6 @@ Console = Tea.Container.extend('Console', {
         this.open();
         this.editor._formType = null;
         this.editor.setValue(node);
-        console.log(node);
     },
     onResize : function() {
         if (this._open == true) {

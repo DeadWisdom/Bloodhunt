@@ -1,8 +1,9 @@
 import json
 import wiki
+import search
 from creole import text2html
 from schema.util import slug as slugify
-from flask import Flask, render_template, jsonify, request, abort, current_app
+from flask import Flask, render_template, jsonify, request, abort, current_app, render_template_string
 app = Flask(__name__)
 application = app
 app.debug = True
@@ -12,6 +13,16 @@ app.jinja_env.filters['creole'] = text2html
 
 
 ## Views ##
+@app.route('/:search/', methods=['GET'])
+def search_nodes():
+    q = request.args.get('q').strip()
+    if len(q) < 3:
+        abort(400)
+    nodes = unique_list( search.query(request.args.get('q')), max=40 )
+    nodes = map(render_summary, nodes)
+    nodes = map(render_dates, nodes)
+    return json_response(nodes)
+
 @app.route('/', methods=['GET'])
 def index():
     return get_nodes('')
@@ -20,8 +31,10 @@ def index():
 def get_nodes(path):
     nodes = [get_node_or_shell(part) for part in path.split('/') if part.strip()]
     if request.is_xhr:
+        nodes = map(render_details, nodes)
         return json_response(nodes)
     nodes.insert(0, get_node_or_shell('index'))
+    nodes = map(render_details, nodes)
     types = wiki.get_types()
     return render_template("index.html", **locals())
 
@@ -31,7 +44,7 @@ def post_node(slug=None):
     try:
         value = json.loads(value)
         value = wiki.put(slug, value)
-        #value['_html'] = text2html(value['content'])
+        value = render_details(value)
         return jsonify(value)
     except wiki.FormError, e:
         return jsonify({
@@ -43,6 +56,19 @@ def post_node(slug=None):
 
 
 ## Helpers ##
+def render_details(node):
+    node['_html'] = render_template_string( wiki.get_type_template(node['type'], 'details'), node=node)
+    return node
+
+def render_summary(node):
+    node['_html'] = render_template_string( wiki.get_type_template(node['type'], 'summary'), node=node)
+    return node
+    
+def render_dates(node):
+    if ('updated' in node and node['updated']):
+        node['updated'] = node['updated'].strftime('%Y-%m-%dT%H:%M:%S')
+    return node
+
 def get_node_or_shell(slug):
     node = wiki.get(slug)
     if node is not None:
@@ -63,9 +89,21 @@ def get_node_or_shell(slug):
         '_empty': True 
     }
 
-
 def json_response(data):
     return current_app.response_class(json.dumps(data, indent=None if request.is_xhr else 2), mimetype='application/json')
+
+def unique_list(seq, max=None):
+   seen = {}
+   result = []
+   for item in seq:
+       marker = item['slug']
+       if marker in seen:
+           continue
+       seen[marker] = 1
+       result.append(item)
+       if max is not None and len(result) >= max:
+           break
+   return result
 
 
 ## Signals ##

@@ -92,7 +92,7 @@ def slug(str):
         return ""
     str = str.strip().lower()
     str = re_strip.sub('', str)
-    str = re.sub('[^\w\s-]', '', str)
+    str = re.sub('[^\w\s-]', ' ', str)
     str = re.sub('\s+', '-', str)
     str = re.sub('-+', '-', str)
     return str

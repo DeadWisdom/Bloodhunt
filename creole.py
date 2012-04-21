@@ -44,6 +44,9 @@ def float(macro, environ, direction="left"):
     else:
         return tag.div(macro.parsed_body(), class_="left")
 
+def center(macro, environ):
+    return tag.div(macro.parsed_body(), style='text-align: center')
+
 def imagebox(macro, environ, direction="left"):
     if direction == 'right':
         return tag.div(macro.parsed_body(), class_="imagebox right")
@@ -70,7 +73,7 @@ dialect = creoleparser.create_dialect(
               wiki_links_class_func=wiki_links_class_func,
               wiki_links_path_func=wiki_links_path_func,
               wiki_links_space_char="-",
-              bodied_macros={'menu': menu, 'hidden': hidden, 'float': float, 'imagebox': imagebox},
+              bodied_macros={'menu': menu, 'hidden': hidden, 'float': float, 'imagebox': imagebox, 'center': center},
               non_bodied_macros={'related': related, 'recent': recent})
 
 parser = creoleparser.Parser(dialect, encoding=None)

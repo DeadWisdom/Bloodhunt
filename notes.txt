@@ -1,0 +1,30 @@
+Private = True
+
+permissions.can_edit(node, username)
+permissions.can_view(node, username)
+
+permissions.process(username, "view", node)
+permissions.process(username, "edit", node)
+
+permissions.can_edit(node, username)
+permissions.can_admin(node, username)
+
+notes.process(node, username)
+
+user = {
+    "username": "deadwisdom",
+    "email": "deadwisdom@gmail.com"
+}
+
+user.authenticate("deadwisdom", "******")
+
+user.get_email("deadwisdom")
+user.set_email("deadwisdom", "deadwisdom@gmail.com")
+user.check_password("deadwisdom", "******")
+user.set_password("deadwisdom", "******")
+
+user.send_invite("deadwisdom@gmail.com", requested=True) -> key
+user.verify_invite(key)
+
+user.create_user(key=key, username="deadwisdom", password="*****")
+

@@ -17,8 +17,7 @@ app.jinja_env.filters['creole'] = text2html
 @app.template_filter()
 def field(node, attr, label=None):
     label = label or attr.title()
-    attr = slugify(attr)
-    val = node.get(attr, '')
+    val = node.get(slugify(attr), None) or node.get(attr, '')
     if not val:
         return ""
     return Markup("<dt>%s</dt><dd>%s</dd>" % (label, text2html(val)))

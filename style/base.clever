@@ -17,6 +17,9 @@ p:
 .right:
     float: right
 
+.left:
+    float: left
+
 .t-scrim:
     z-index: 9
     position: fixed

@@ -38,6 +38,18 @@ def recent(macro, environ):
             links.append( tag.a(slug, href=slug) )
     return tag.div(links, class_="recent")
 
+def float(macro, environ, direction="left"):
+    if direction == 'right':
+        return tag.div(macro.parsed_body(), class_="right")
+    else:
+        return tag.div(macro.parsed_body(), class_="left")
+
+def imagebox(macro, environ, direction="left"):
+    if direction == 'right':
+        return tag.div(macro.parsed_body(), class_="imagebox right")
+    else:
+        return tag.div(macro.parsed_body(), class_="imagebox left")
+
 def wiki_links_path_func(src):
     if (".com" in src or
         ".net" in src or
@@ -58,7 +70,7 @@ dialect = creoleparser.create_dialect(
               wiki_links_class_func=wiki_links_class_func,
               wiki_links_path_func=wiki_links_path_func,
               wiki_links_space_char="-",
-              bodied_macros={'menu': menu, 'hidden': hidden},
+              bodied_macros={'menu': menu, 'hidden': hidden, 'float': float, 'imagebox': imagebox},
               non_bodied_macros={'related': related, 'recent': recent})
 
 parser = creoleparser.Parser(dialect, encoding=None)

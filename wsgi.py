@@ -3,22 +3,33 @@ import wiki
 import search
 from creole import text2html
 from schema.util import slug as slugify
-from flask import Flask, render_template, jsonify, request, abort, current_app, render_template_string
+from flask import Flask, render_template, jsonify, request, abort, current_app, render_template_string, Markup
+from sessions import RedisSessionInterface
+
 app = Flask(__name__)
 application = app
 app.debug = True
+app.session_interface = RedisSessionInterface()
 
 ### Flask Mucking ###
 app.jinja_env.filters['creole'] = text2html
 
+@app.template_filter()
+def field(node, attr, label=None):
+    label = label or attr.title()
+    attr = slugify(attr)
+    val = node[attr]
+    if not val:
+        return ""
+    return Markup("<dt>%s</dt><dd>%s</dd>" % (label, text2html(val)))
 
 ## Views ##
 @app.route('/:search/', methods=['GET'])
 def search_nodes():
-    q = request.args.get('q').strip()
+    q = request.args.get('q').strip().lower()
     if len(q) < 3:
         abort(400)
-    nodes = unique_list( search.query(request.args.get('q')), max=40 )
+    nodes = unique_list( search.query(q), max=40 )
     nodes = map(render_summary, nodes)
     nodes = map(render_dates, nodes)
     return json_response(nodes)
@@ -53,6 +64,12 @@ def post_node(slug=None):
     except:
         raise
         abort(400)
+
+@app.route('/login', methods=['POST'])
+def login():
+    session['username'] = request.form['username']
+    session['password'] = request.form['password']
+    return 
 
 
 ## Helpers ##
